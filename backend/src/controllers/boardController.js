@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Board from "../models/Board.js";
+import List from "../models/List.js";
 
 // @desc    Create new board
 // @route   POST /api/boards
@@ -33,6 +34,7 @@ export const getBoards = asyncHandler(async (req, res) => {
 // @desc    Get single board
 // @route   GET /api/boards/:id
 // @access  Private
+
 export const getBoardById = asyncHandler(async (req, res) => {
 	const board = await Board.findById(req.params.id);
 
@@ -41,13 +43,14 @@ export const getBoardById = asyncHandler(async (req, res) => {
 		throw new Error("Board not found");
 	}
 
-	// check if user is a member
 	if (!board.members.includes(req.user._id)) {
 		res.status(403);
 		throw new Error("Not authorized to view this board");
 	}
 
-	res.json(board);
+	const lists = await List.find({ board: board._id }).sort("position");
+
+	res.json({ ...board.toObject(), lists });
 });
 
 // @desc    Update board
