@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import boardApi from "../api/boardApi";
 import listApi from "../api/listApi";
 import cardApi from "../api/cardApi";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Trash, Plus } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import CardModal from "../components/cardModal";
 import EditCardModal from "../components/EditCardModal";
@@ -98,7 +98,7 @@ export default function BoardDetailPage() {
 
 	// Edit Card modal state
 	const [editOpen, setEditOpen] = useState(false);
-	const [editListId, setEditListId] = useState(null);
+	// const [editListId, setEditListId] = useState(null);
 	const [editCardId, setEditCardId] = useState(null);
 	const [editTitle, setEditTitle] = useState("");
 	const [editDescription, setEditDescription] = useState("");
@@ -173,6 +173,62 @@ export default function BoardDetailPage() {
 				})
 			);
 			await cardApi.remove(cardId);
+		} catch (err) {
+			console.log(err, "error");
+			// Rollback
+			setLists(snapshot);
+		}
+	};
+
+	// Edit List modal state
+	const [editListOpen, setEditListOpen] = useState(false);
+	const [editListId, setEditListId] = useState(null);
+	const [editListName, setEditListName] = useState("");
+	const [editListSaving, setEditListSaving] = useState(false);
+	const [editListError, setEditListError] = useState("");
+
+	const openEditList = (list) => {
+		const lid = list._id || list.id;
+		setEditListId(lid);
+		setEditListName(list.name || "");
+		setEditListError("");
+		setEditListOpen(true);
+	};
+	const closeEditList = () => {
+		if (editListSaving) return;
+		setEditListOpen(false);
+		setEditListId(null);
+		setEditListName("");
+		setEditListError("");
+	};
+	const saveEditList = async (e) => {
+		e?.preventDefault();
+		const name = editListName.trim();
+		if (!name) {
+			setEditListError("List name is required");
+			return;
+		}
+		try {
+			setEditListSaving(true);
+			const updated = await listApi.update(editListId, { name });
+			setLists((prev) =>
+				prev.map((l) => ((l._id || l.id) === (updated._id || updated.id) ? { ...l, name: updated.name } : l))
+			);
+			setEditListSaving(false);
+			closeEditList();
+		} catch (err) {
+			setEditListSaving(false);
+			const msg = err?.response?.data?.message || err?.response?.data?.error || err?.message || "Failed to update list";
+			setEditListError(msg);
+		}
+	};
+	const handleDeleteList = async (listId) => {
+		if (!confirm("Delete this list and its cards?")) return;
+		const snapshot = lists;
+		try {
+			// Optimistic UI
+			setLists((prev) => prev.filter((l) => (l._id || l.id) !== listId));
+			await listApi.remove(listId);
 		} catch (err) {
 			console.log(err, "error");
 			// Rollback
@@ -287,22 +343,43 @@ export default function BoardDetailPage() {
 							<div
 								key={listId}
 								className="
-								bg-white rounded-lg p-4 border border-gray-300 shadow-sm
-								flex-1 shrink
-								min-w-[220px] sm:min-w-[260px] md:min-w-[300px]
-								"
+                  bg-white rounded-lg p-4 border border-gray-300 shadow-sm
+                  flex-1 shrink
+                  min-w-[220px] sm:min-w-[260px] md:min-w-[300px]
+                "
 							>
 								<div className="mb-3 flex items-center justify-between">
 									<h2 className="font-semibold">{list.name}</h2>
-									<button
-										type="button"
-										onClick={() => openAddCardModal(listId)}
-										className="rounded-md border border-gray-300 bg-white px-2 py-1 text-xs text-gray-700 hover:bg-gray-50"
-										aria-label={`Add card to ${list.name}`}
-										title="Add card"
-									>
-										+ Add
-									</button>
+									<div className="flex items-center gap-1">
+										<button
+											type="button"
+											onClick={() => openAddCardModal(listId)}
+											className="rounded-md border border-gray-300 bg-white px-2 py-1 text-xs text-gray-700 hover:bg-gray-50"
+											aria-label={`Add card to ${list.name}`}
+											title="Add card"
+										>
+											{/* + Add */}
+											<Plus size={10} />
+										</button>
+										<button
+											type="button"
+											onClick={() => openEditList(list)}
+											className="rounded-md border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100"
+											aria-label="Edit list"
+											title="Edit list"
+										>
+											<Edit size={10} color="blue" />
+										</button>
+										<button
+											type="button"
+											onClick={() => handleDeleteList(listId)}
+											className="rounded-md border border-red-300 bg-white px-2 py-1 text-[11px] text-red-600 hover:bg-red-50"
+											aria-label="Delete list"
+											title="Delete list"
+										>
+											<Trash size={10} color="red" />
+										</button>
+									</div>
 								</div>
 
 								<Droppable droppableId={String(listId)} type="CARD">
@@ -380,7 +457,7 @@ export default function BoardDetailPage() {
 				</div>
 			</DragDropContext>
 
-			{/* Simple Add Card Modal */}
+			{/* Add Card Modal */}
 			<CardModal
 				open={modalOpen}
 				submitting={submitting}
@@ -405,6 +482,48 @@ export default function BoardDetailPage() {
 				onChangeDescription={(e) => setEditDescription(e.target.value)}
 				onSubmit={saveEdit}
 			/>
+
+			{/* Edit List Modal (inline) */}
+			{editListOpen && (
+				<div className="fixed inset-0 z-50 flex items-center justify-center" role="dialog" aria-modal="true">
+					<div className="absolute inset-0 bg-black/40" onClick={closeEditList} />
+					<div className="relative z-10 w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
+						<h3 className="text-lg font-semibold mb-3">Edit List</h3>
+						<form onSubmit={saveEditList} className="space-y-3">
+							<div>
+								<label className="mb-1 block text-sm font-medium text-gray-700">
+									Name <span className="text-red-500">*</span>
+								</label>
+								<input
+									autoFocus
+									type="text"
+									value={editListName}
+									onChange={(e) => setEditListName(e.target.value)}
+									className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-500"
+								/>
+							</div>
+							{editListError ? <p className="text-sm text-red-600">{editListError}</p> : null}
+							<div className="mt-2 flex items-center gap-2">
+								<button
+									type="submit"
+									disabled={editListSaving}
+									className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+								>
+									{editListSaving ? "Saving..." : "Save"}
+								</button>
+								<button
+									type="button"
+									onClick={closeEditList}
+									disabled={editListSaving}
+									className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+								>
+									Cancel
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }
