@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import List from "../models/List.js";
 import Board from "../models/Board.js";
+import Card from "../models/Card.js";
 
 // @desc    Create new list
 // @route   POST /api/lists
@@ -39,9 +40,9 @@ export const createList = asyncHandler(async (req, res) => {
 // @desc    Get all lists for a board
 // @route   GET /api/lists/:boardId
 // @access  Private
+
 export const getListsByBoard = asyncHandler(async (req, res) => {
 	const board = await Board.findById(req.params.boardId);
-
 	if (!board) {
 		res.status(404);
 		throw new Error("Board not found");
@@ -49,11 +50,18 @@ export const getListsByBoard = asyncHandler(async (req, res) => {
 
 	if (!board.members.includes(req.user._id)) {
 		res.status(403);
-		throw new Error("Not authorized to view lists of this board");
+		throw new Error("Not authorized");
 	}
 
 	const lists = await List.find({ board: req.params.boardId }).sort("position");
-	res.json(lists);
+	const listsWithCards = await Promise.all(
+		lists.map(async (list) => {
+			const cards = await Card.find({ list: list._id }).sort("position");
+			return { ...list.toObject(), cards };
+		})
+	);
+
+	res.json(listsWithCards);
 });
 
 // @desc    Update list

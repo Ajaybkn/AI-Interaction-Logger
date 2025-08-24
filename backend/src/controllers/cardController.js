@@ -1,0 +1,137 @@
+import asyncHandler from "express-async-handler";
+import Card from "../models/Card.js";
+import List from "../models/List.js";
+import Board from "../models/Board.js";
+
+// @desc    Create a new card
+// @route   POST /api/cards
+// @access  Private
+export const createCard = asyncHandler(async (req, res) => {
+	const { title, description, listId } = req.body;
+
+	if (!title || !listId) {
+		res.status(400);
+		throw new Error("Title and listId are required");
+	}
+
+	const list = await List.findById(listId);
+	if (!list) {
+		res.status(404);
+		throw new Error("List not found");
+	}
+
+	const board = await Board.findById(list.board);
+	if (!board.members.includes(req.user._id)) {
+		res.status(403);
+		throw new Error("Not authorized to add card to this board");
+	}
+
+	const cardCount = await Card.countDocuments({ list: listId });
+
+	const card = await Card.create({
+		title,
+		description,
+		list: listId,
+		board: list.board,
+		position: cardCount,
+	});
+
+	res.status(201).json(card);
+});
+
+// @desc    Get all cards in a list
+// @route   GET /api/cards/:listId
+// @access  Private
+export const getCardsByList = asyncHandler(async (req, res) => {
+	const list = await List.findById(req.params.listId);
+	if (!list) {
+		res.status(404);
+		throw new Error("List not found");
+	}
+
+	const board = await Board.findById(list.board);
+	if (!board.members.includes(req.user._id)) {
+		res.status(403);
+		throw new Error("Not authorized to view cards");
+	}
+
+	const cards = await Card.find({ list: req.params.listId }).sort("position");
+	res.json(cards);
+});
+
+// @desc    Update card
+// @route   PUT /api/cards/:id
+// @access  Private
+export const updateCard = asyncHandler(async (req, res) => {
+	const card = await Card.findById(req.params.id);
+	if (!card) {
+		res.status(404);
+		throw new Error("Card not found");
+	}
+
+	const board = await Board.findById(card.board);
+	if (!board.members.includes(req.user._id)) {
+		res.status(403);
+		throw new Error("Not authorized");
+	}
+
+	card.title = req.body.title || card.title;
+	card.description = req.body.description || card.description;
+	card.labels = req.body.labels || card.labels;
+	card.dueDate = req.body.dueDate || card.dueDate;
+	card.assignedTo = req.body.assignedTo || card.assignedTo;
+
+	const updatedCard = await card.save();
+	res.json(updatedCard);
+});
+
+// @desc    Move card between lists
+// @route   PATCH /api/cards/:id/move
+// @access  Private
+export const moveCard = asyncHandler(async (req, res) => {
+	const { targetListId, newPosition } = req.body;
+	const card = await Card.findById(req.params.id);
+
+	if (!card) {
+		res.status(404);
+		throw new Error("Card not found");
+	}
+
+	const board = await Board.findById(card.board);
+	if (!board.members.includes(req.user._id)) {
+		res.status(403);
+		throw new Error("Not authorized");
+	}
+
+	const targetList = await List.findById(targetListId);
+	if (!targetList) {
+		res.status(404);
+		throw new Error("Target list not found");
+	}
+
+	card.list = targetListId;
+	if (newPosition !== undefined) card.position = newPosition;
+
+	const movedCard = await card.save();
+	res.json(movedCard);
+});
+
+// @desc    Delete card
+// @route   DELETE /api/cards/:id
+// @access  Private
+export const deleteCard = asyncHandler(async (req, res) => {
+	const card = await Card.findById(req.params.id);
+	if (!card) {
+		res.status(404);
+		throw new Error("Card not found");
+	}
+
+	const board = await Board.findById(card.board);
+	if (!board.members.includes(req.user._id)) {
+		res.status(403);
+		throw new Error("Not authorized");
+	}
+
+	await card.deleteOne();
+	res.json({ message: "Card removed" });
+});
