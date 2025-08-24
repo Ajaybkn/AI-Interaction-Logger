@@ -336,124 +336,128 @@ export default function BoardDetailPage() {
 			{/* DnD context */}
 			<DragDropContext onDragEnd={onDragEnd}>
 				<div className="flex gap-4 overflow-x-auto">
-					{lists.map((list) => {
-						const listId = list._id || list.id;
-						const cards = list.cards || [];
-						return (
-							<div
-								key={listId}
-								className="
-                  bg-white rounded-lg p-4 border border-gray-300 shadow-sm
-                  flex-1 shrink
-                  min-w-[220px] sm:min-w-[260px] md:min-w-[300px]
-                "
-							>
-								<div className="mb-3 flex items-center justify-between">
-									<h2 className="font-semibold">{list.name}</h2>
-									<div className="flex items-center gap-1">
-										<button
-											type="button"
-											onClick={() => openAddCardModal(listId)}
-											className="rounded-md border border-gray-300 bg-white px-2 py-1 text-xs text-gray-700 hover:bg-gray-50"
-											aria-label={`Add card to ${list.name}`}
-											title="Add card"
-										>
-											{/* + Add */}
-											<Plus size={10} />
-										</button>
-										<button
-											type="button"
-											onClick={() => openEditList(list)}
-											className="rounded-md border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100"
-											aria-label="Edit list"
-											title="Edit list"
-										>
-											<Edit size={10} color="blue" />
-										</button>
-										<button
-											type="button"
-											onClick={() => handleDeleteList(listId)}
-											className="rounded-md border border-red-300 bg-white px-2 py-1 text-[11px] text-red-600 hover:bg-red-50"
-											aria-label="Delete list"
-											title="Delete list"
-										>
-											<Trash size={10} color="red" />
-										</button>
+					{lists.length == 0 ? (
+						<div className="text-center mx-auto text-lg text-gray-500">No List Found...</div>
+					) : (
+						lists.map((list) => {
+							const listId = list._id || list.id;
+							const cards = list.cards || [];
+							return (
+								<div
+									key={listId}
+									className="
+										bg-white rounded-lg p-4 border border-gray-300 shadow-sm
+										flex-1 shrink	
+										min-w-[220px] sm:min-w-[260px] md:min-w-[300px]
+										"
+								>
+									<div className="mb-3 flex items-center justify-between">
+										<h2 className="font-semibold">{list.name}</h2>
+										<div className="flex items-center gap-1">
+											<button
+												type="button"
+												onClick={() => openAddCardModal(listId)}
+												className="rounded-md border border-gray-300 bg-white px-2 py-1 text-xs text-gray-700 hover:bg-gray-50"
+												aria-label={`Add card to ${list.name}`}
+												title="Add card"
+											>
+												{/* + Add */}
+												<Plus size={10} />
+											</button>
+											<button
+												type="button"
+												onClick={() => openEditList(list)}
+												className="rounded-md border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100"
+												aria-label="Edit list"
+												title="Edit list"
+											>
+												<Edit size={10} color="blue" />
+											</button>
+											<button
+												type="button"
+												onClick={() => handleDeleteList(listId)}
+												className="rounded-md border border-red-300 bg-white px-2 py-1 text-[11px] text-red-600 hover:bg-red-50"
+												aria-label="Delete list"
+												title="Delete list"
+											>
+												<Trash size={10} color="red" />
+											</button>
+										</div>
 									</div>
-								</div>
 
-								<Droppable droppableId={String(listId)} type="CARD">
-									{(dropProvided, dropSnapshot) => (
-										<div
-											ref={dropProvided.innerRef}
-											{...dropProvided.droppableProps}
-											className={`space-y-2 transition-colors ${
-												dropSnapshot.isDraggingOver ? "bg-gray-50" : ""
-											} cursor-grab`}
-										>
-											{cards.length > 0 ? (
-												cards.map((card, index) => {
-													const cardId = card._id || card.id;
-													return (
-														<Draggable key={cardId} draggableId={String(cardId)} index={index}>
-															{(dragProvided, dragSnapshot) => (
-																<div
-																	ref={dragProvided.innerRef}
-																	{...dragProvided.draggableProps}
-																	{...dragProvided.dragHandleProps}
-																	className={`rounded-md border border-gray-200 bg-gray-50 p-3 ${
-																		dragSnapshot.isDragging ? "shadow-md" : ""
-																	}`}
-																>
-																	<div className="flex items-start justify-between gap-2">
-																		<div className="min-w-0">
-																			<p className="text-sm font-medium text-gray-800 break-words">{card.title}</p>
-																			{card.description ? (
-																				<p className="mt-1 text-xs text-gray-500 break-words">{card.description}</p>
-																			) : null}
-																		</div>
-																		<div className="flex items-center gap-1 shrink-0">
-																			<button
-																				type="button"
-																				onClick={(e) => {
-																					e.stopPropagation();
-																					openEdit(listId, card);
-																				}}
-																				className="rounded border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100"
-																				title="Edit card"
-																				aria-label="Edit card"
-																			>
-																				<Edit size={10} color="blue" />
-																			</button>
-																			<button
-																				type="button"
-																				onClick={(e) => {
-																					e.stopPropagation();
-																					handleDeleteCard(listId, cardId);
-																				}}
-																				className="rounded border border-red-300 bg-white px-2 py-1 text-[11px] text-red-600 hover:bg-red-50"
-																				title="Delete card"
-																				aria-label="Delete card"
-																			>
-																				<Trash size={10} color="red" />
-																			</button>
+									<Droppable droppableId={String(listId)} type="CARD">
+										{(dropProvided, dropSnapshot) => (
+											<div
+												ref={dropProvided.innerRef}
+												{...dropProvided.droppableProps}
+												className={`space-y-2 transition-colors ${
+													dropSnapshot.isDraggingOver ? "bg-gray-50" : ""
+												} cursor-grab`}
+											>
+												{cards.length > 0 ? (
+													cards.map((card, index) => {
+														const cardId = card._id || card.id;
+														return (
+															<Draggable key={cardId} draggableId={String(cardId)} index={index}>
+																{(dragProvided, dragSnapshot) => (
+																	<div
+																		ref={dragProvided.innerRef}
+																		{...dragProvided.draggableProps}
+																		{...dragProvided.dragHandleProps}
+																		className={`rounded-md border border-gray-200 bg-gray-50 p-3 ${
+																			dragSnapshot.isDragging ? "shadow-md" : ""
+																		}`}
+																	>
+																		<div className="flex items-start justify-between gap-2">
+																			<div className="min-w-0">
+																				<p className="text-sm font-medium text-gray-800 break-words">{card.title}</p>
+																				{card.description ? (
+																					<p className="mt-1 text-xs text-gray-500 break-words">{card.description}</p>
+																				) : null}
+																			</div>
+																			<div className="flex items-center gap-1 shrink-0">
+																				<button
+																					type="button"
+																					onClick={(e) => {
+																						e.stopPropagation();
+																						openEdit(listId, card);
+																					}}
+																					className="rounded border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100"
+																					title="Edit card"
+																					aria-label="Edit card"
+																				>
+																					<Edit size={10} color="blue" />
+																				</button>
+																				<button
+																					type="button"
+																					onClick={(e) => {
+																						e.stopPropagation();
+																						handleDeleteCard(listId, cardId);
+																					}}
+																					className="rounded border border-red-300 bg-white px-2 py-1 text-[11px] text-red-600 hover:bg-red-50"
+																					title="Delete card"
+																					aria-label="Delete card"
+																				>
+																					<Trash size={10} color="red" />
+																				</button>
+																			</div>
 																		</div>
 																	</div>
-																</div>
-															)}
-														</Draggable>
-													);
-												})
-											) : (
-												<p className="text-sm text-gray-500 italic">No cards yet...</p>
-											)}
-											{dropProvided.placeholder}
-										</div>
-									)}
-								</Droppable>
-							</div>
-						);
-					})}
+																)}
+															</Draggable>
+														);
+													})
+												) : (
+													<p className="text-sm text-gray-500 italic">No cards yet...</p>
+												)}
+												{dropProvided.placeholder}
+											</div>
+										)}
+									</Droppable>
+								</div>
+							);
+						})
+					)}
 				</div>
 			</DragDropContext>
 

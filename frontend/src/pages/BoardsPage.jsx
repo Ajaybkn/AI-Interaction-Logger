@@ -76,6 +76,11 @@ export default function BoardsPage() {
 
 			{/* Board List */}
 			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+				{boards.length === 0 && (
+					<div className="col-span-full text-center justify-center text-gray-500">
+						No boards found. Create your first board!
+					</div>
+				)}
 				{boards.map((b) => {
 					const bid = b._id || b.id;
 					return (
