@@ -135,3 +135,26 @@ export const deleteCard = asyncHandler(async (req, res) => {
 	await card.deleteOne();
 	res.json({ message: "Card removed" });
 });
+
+export const searchCards = asyncHandler(async (req, res) => {
+	const { q } = req.query;
+
+	if (!q) {
+		res.status(400);
+		throw new Error("Search query (q) is required");
+	}
+
+	// find boards where the user is a member
+	const boards = await Board.find({ members: req.user._id }).select("_id");
+	const boardIds = boards.map((b) => b._id);
+
+	// search cards only in those boards
+	const cards = await Card.find({
+		board: { $in: boardIds },
+		$or: [{ title: { $regex: q, $options: "i" } }, { description: { $regex: q, $options: "i" } }],
+	})
+		.populate("list", "title")
+		.populate("board", "title");
+
+	res.json(cards);
+});
