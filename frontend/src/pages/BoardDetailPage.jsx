@@ -6,6 +6,8 @@ import listApi from "../api/listApi";
 import cardApi from "../api/cardApi";
 import { Edit, Trash } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import CardModal from "../components/cardModal";
+import EditCardModal from "../components/EditCardModal";
 
 export default function BoardDetailPage() {
 	const { id } = useParams(); // boardId from route
@@ -285,10 +287,10 @@ export default function BoardDetailPage() {
 							<div
 								key={listId}
 								className="
-                  bg-white rounded-lg p-4 border border-gray-300 shadow-sm
-                  flex-1 shrink
-                  min-w-[220px] sm:min-w-[260px] md:min-w-[300px]
-                "
+								bg-white rounded-lg p-4 border border-gray-300 shadow-sm
+								flex-1 shrink
+								min-w-[220px] sm:min-w-[260px] md:min-w-[300px]
+								"
 							>
 								<div className="mb-3 flex items-center justify-between">
 									<h2 className="font-semibold">{list.name}</h2>
@@ -379,109 +381,30 @@ export default function BoardDetailPage() {
 			</DragDropContext>
 
 			{/* Simple Add Card Modal */}
-			{modalOpen && (
-				<div className="fixed inset-0 z-50 flex items-center justify-center" role="dialog" aria-modal="true">
-					<div className="absolute inset-0 bg-black/40" onClick={closeModal} />
-					<div className="relative z-10 w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
-						<h3 className="text-lg font-semibold mb-3">Add Card</h3>
-
-						<form onSubmit={submitAddCard} className="space-y-3">
-							<div>
-								<label className="mb-1 block text-sm font-medium text-gray-700">
-									Title <span className="text-red-500">*</span>
-								</label>
-								<input
-									autoFocus
-									type="text"
-									value={cardTitle}
-									onChange={(e) => setCardTitle(e.target.value)}
-									placeholder="Enter card title"
-									className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-500"
-								/>
-							</div>
-							<div>
-								<label className="mb-1 block text-sm font-medium text-gray-700">Description</label>
-								<textarea
-									value={cardDescription}
-									onChange={(e) => setCardDescription(e.target.value)}
-									placeholder="Optional description"
-									rows={3}
-									className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-500"
-								/>
-							</div>
-							{submitError ? <p className="text-sm text-red-600">{submitError}</p> : null}
-							<div className="mt-2 flex items-center gap-2">
-								<button
-									type="submit"
-									disabled={submitting}
-									className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60"
-								>
-									{submitting ? "Adding..." : "Add Card"}
-								</button>
-								<button
-									type="button"
-									onClick={closeModal}
-									disabled={submitting}
-									className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-60"
-								>
-									Cancel
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			)}
+			<CardModal
+				open={modalOpen}
+				submitting={submitting}
+				submitError={submitError}
+				cardTitle={cardTitle}
+				cardDescription={cardDescription}
+				onClose={closeModal}
+				onChangeTitle={(e) => setCardTitle(e.target.value)}
+				onChangeDescription={(e) => setCardDescription(e.target.value)}
+				onSubmit={submitAddCard}
+			/>
 
 			{/* Edit Card Modal */}
-			{editOpen && (
-				<div className="fixed inset-0 z-50 flex items-center justify-center" role="dialog" aria-modal="true">
-					<div className="absolute inset-0 bg-black/40" onClick={closeEdit} />
-					<div className="relative z-10 w-full max-w-md rounded-lg bg-white p-5 shadow-lg">
-						<h3 className="text-lg font-semibold mb-3">Edit Card</h3>
-						<form onSubmit={saveEdit} className="space-y-3">
-							<div>
-								<label className="mb-1 block text-sm font-medium text-gray-700">
-									Title <span className="text-red-500">*</span>
-								</label>
-								<input
-									autoFocus
-									type="text"
-									value={editTitle}
-									onChange={(e) => setEditTitle(e.target.value)}
-									className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-500"
-								/>
-							</div>
-							<div>
-								<label className="mb-1 block text-sm font-medium text-gray-700">Description</label>
-								<textarea
-									rows={3}
-									value={editDescription}
-									onChange={(e) => setEditDescription(e.target.value)}
-									className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-500"
-								/>
-							</div>
-							{editError ? <p className="text-sm text-red-600">{editError}</p> : null}
-							<div className="mt-2 flex items-center gap-2">
-								<button
-									type="submit"
-									disabled={editSaving}
-									className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60"
-								>
-									{editSaving ? "Saving..." : "Save"}
-								</button>
-								<button
-									type="button"
-									onClick={closeEdit}
-									disabled={editSaving}
-									className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-60"
-								>
-									Cancel
-								</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			)}
+			<EditCardModal
+				open={editOpen}
+				saving={editSaving}
+				error={editError}
+				title={editTitle}
+				description={editDescription}
+				onClose={closeEdit}
+				onChangeTitle={(e) => setEditTitle(e.target.value)}
+				onChangeDescription={(e) => setEditDescription(e.target.value)}
+				onSubmit={saveEdit}
+			/>
 		</div>
 	);
 }
