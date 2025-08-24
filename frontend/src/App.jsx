@@ -1,35 +1,74 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+import BoardsPage from "./pages/BoardsPage";
+import BoardDetailPage from "./pages/BoardDetailPage";
+import AuthContext from "./context/AuthContext";
+import AuthProvider from "./context/AuthProvider";
+import { useContext } from "react";
+import DashboardPage from "./pages/DashboardPage";
+import PrivateLayout from "./layouts/PrivateLayout";
 
-function App() {
-  const [count, setCount] = useState(0)
+function PrivateRoute({ children }) {
+	const { user, loading } = useContext(AuthContext);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	if (loading) return <p>Loading...</p>;
+	return user ? children : <Navigate to="/login" replace />;
 }
 
-export default App
+function RootRedirect() {
+	const { user } = useContext(AuthContext);
+	return user ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />;
+}
+
+export default function App() {
+	return (
+		<AuthProvider>
+			<BrowserRouter>
+				<Routes>
+					{/* Root redirect */}
+					<Route path="/" element={<RootRedirect />} />
+
+					{/* Public Routes */}
+					<Route path="/login" element={<LoginPage />} />
+					<Route path="/signup" element={<SignupPage />} />
+
+					{/* Private Routes with Navbar */}
+					<Route
+						path="/dashboard"
+						element={
+							<PrivateRoute>
+								<PrivateLayout>
+									<DashboardPage />
+								</PrivateLayout>
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path="/boards"
+						element={
+							<PrivateRoute>
+								<PrivateLayout>
+									<BoardsPage />
+								</PrivateLayout>
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path="/boards/:id"
+						element={
+							<PrivateRoute>
+								<PrivateLayout>
+									<BoardDetailPage />
+								</PrivateLayout>
+							</PrivateRoute>
+						}
+					/>
+
+					{/* catch-all */}
+					<Route path="*" element={<Navigate to="/" replace />} />
+				</Routes>
+			</BrowserRouter>
+		</AuthProvider>
+	);
+}

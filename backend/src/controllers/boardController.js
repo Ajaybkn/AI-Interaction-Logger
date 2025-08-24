@@ -13,6 +13,7 @@ export const createBoard = asyncHandler(async (req, res) => {
 		throw new Error("Board name is required");
 	}
 
+	// 1. Create the board
 	const board = await Board.create({
 		name,
 		description,
@@ -20,7 +21,24 @@ export const createBoard = asyncHandler(async (req, res) => {
 		members: [req.user._id], // creator is auto member
 	});
 
-	res.status(201).json(board);
+	// 2. Create default lists for Kanban structure
+	const defaultLists = ["Todo", "In Progress", "Done"];
+
+	const lists = await Promise.all(
+		defaultLists.map((listName, index) =>
+			List.create({
+				name: listName,
+				board: board._id,
+				position: index,
+			})
+		)
+	);
+
+	// 3. Return board + its lists
+	res.status(201).json({
+		...board.toObject(),
+		lists,
+	});
 });
 
 // @desc    Get all boards of logged in user

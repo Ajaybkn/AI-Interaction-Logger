@@ -38,7 +38,6 @@ export const registerUser = asyncHandler(async (req, res) => {
 // @route POST /api/auth/login
 // @access Public
 export const loginUser = asyncHandler(async (req, res) => {
-	console.log("first");
 	const { email, password } = req.body;
 
 	const user = await User.findOne({ email });
