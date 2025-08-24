@@ -111,7 +111,7 @@ export default function Navbar() {
 							to="/dashboard"
 							className="inline-flex items-center rounded px-2 py-1 text-sm font-semibold tracking-wide text-white hover:bg-white/10"
 						>
-							MyApp
+							Kanban Board
 						</Link>
 
 						{/* Center: Links */}
