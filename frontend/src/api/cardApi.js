@@ -13,7 +13,13 @@ const cardApi = {
 	move: (cardId, payload) => axios.patch(`${API}/${cardId}/move`, payload, authHeader()).then((r) => r.data),
 	update: (cardId, payload) => axios.put(`${API}/${cardId}`, payload, authHeader()).then((r) => r.data),
 	remove: (cardId) => axios.delete(`${API}/${cardId}`, authHeader()).then((r) => r.data),
-	// add more endpoints later (update, remove, move, etc.)
+	search: async (q) => {
+		const res = await axios.get(`${API}/search`, {
+			params: { q },
+			...authHeader(),
+		});
+		return res.data; // array of cards
+	},
 };
 
 export default cardApi;
