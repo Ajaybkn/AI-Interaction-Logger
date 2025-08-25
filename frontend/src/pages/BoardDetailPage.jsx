@@ -307,7 +307,7 @@ export default function BoardDetailPage() {
 		[lists]
 	);
 
-	if (!board) return <p>Loading...</p>;
+	if (!board) return <div className="loader"></div>;
 
 	return (
 		<div className="p-6">

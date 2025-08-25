@@ -12,7 +12,7 @@ import PrivateLayout from "./layouts/PrivateLayout";
 function PrivateRoute({ children }) {
 	const { user, loading } = useContext(AuthContext);
 
-	if (loading) return <p>Loading...</p>;
+	if (loading) return <div className="loader"></div>;
 	return user ? children : <Navigate to="/login" replace />;
 }
 
