@@ -185,7 +185,7 @@ export default function Navbar() {
 							</div>
 							<button
 								onClick={handleLogout}
-								className="rounded bg-red-500/90 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400"
+								className="rounded cursor-pointer  bg-red-500/90 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400"
 							>
 								Logout
 							</button>
@@ -213,11 +213,13 @@ export default function Navbar() {
 				{menuOpen && (
 					<div className="md:hidden border-t border-slate-700/60 bg-slate-800">
 						<div className="mx-auto max-w-7xl px-3 sm:px-4 py-3 space-y-3">
-							<div className="flex items-center justify-center gap-3">
+							<div className="flex items-center justify-center gap-3" >
 								<Link
 									to="/dashboard"
 									onClick={() => setMenuOpen(false)}
 									className={`rounded px-3 py-1.5 text-sm ${isActive("/dashboard")}`}
+
+									
 								>
 									Dashboard
 								</Link>

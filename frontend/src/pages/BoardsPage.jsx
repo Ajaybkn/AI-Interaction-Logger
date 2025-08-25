@@ -69,7 +69,7 @@ export default function BoardsPage() {
 					placeholder="New board name"
 					className="border rounded px-3 py-2 w-64"
 				/>
-				<button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+				<button type="submit" className="bg-blue-600 cursor-pointer  text-white px-4 py-2 rounded hover:bg-blue-700" title="Create New Board">
 					+ Create
 				</button>
 			</form>
@@ -95,7 +95,7 @@ export default function BoardsPage() {
 									<button
 										type="button"
 										onClick={(e) => handleEditBoard(e, b)}
-										className="rounded border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100"
+										className="rounded border cursor-pointer  border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100"
 										title="Edit board"
 										aria-label="Edit board"
 									>
@@ -104,7 +104,7 @@ export default function BoardsPage() {
 									<button
 										type="button"
 										onClick={(e) => handleDeleteBoard(e, bid)}
-										className="rounded border border-red-300 bg-white px-2 py-1 text-[11px] text-red-600 hover:bg-red-50"
+										className="rounded border cursor-pointer  border-red-300 bg-white px-2 py-1 text-[11px] text-red-600 hover:bg-red-50"
 										title="Delete board"
 										aria-label="Delete board"
 									>

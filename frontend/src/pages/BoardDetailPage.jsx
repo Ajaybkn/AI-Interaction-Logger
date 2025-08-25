@@ -328,7 +328,11 @@ export default function BoardDetailPage() {
 					value={newListName}
 					onChange={(e) => setNewListName(e.target.value)}
 				/>
-				<button onClick={handleCreateList} className="bg-blue-500 text-white px-4 py-2 rounded">
+				<button
+					onClick={handleCreateList}
+					className="bg-blue-500 cursor-pointer  text-white px-4 py-2 rounded"
+					title="Create New List"
+				>
 					Add List
 				</button>
 			</div>
@@ -357,7 +361,7 @@ export default function BoardDetailPage() {
 											<button
 												type="button"
 												onClick={() => openAddCardModal(listId)}
-												className="rounded-md border border-gray-300 bg-white px-2 py-1 text-xs text-gray-700 hover:bg-gray-50"
+												className="rounded-md cursor-pointer  border border-gray-300 bg-white px-2 py-1 text-xs text-gray-700 hover:bg-gray-50"
 												aria-label={`Add card to ${list.name}`}
 												title="Add card"
 											>
@@ -367,7 +371,7 @@ export default function BoardDetailPage() {
 											<button
 												type="button"
 												onClick={() => openEditList(list)}
-												className="rounded-md border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100"
+												className="rounded-md cursor-pointer  border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100"
 												aria-label="Edit list"
 												title="Edit list"
 											>
@@ -376,7 +380,7 @@ export default function BoardDetailPage() {
 											<button
 												type="button"
 												onClick={() => handleDeleteList(listId)}
-												className="rounded-md border border-red-300 bg-white px-2 py-1 text-[11px] text-red-600 hover:bg-red-50"
+												className="rounded-md cursor-pointer  border border-red-300 bg-white px-2 py-1 text-[11px] text-red-600 hover:bg-red-50"
 												aria-label="Delete list"
 												title="Delete list"
 											>
@@ -402,6 +406,7 @@ export default function BoardDetailPage() {
 																{(dragProvided, dragSnapshot) => (
 																	<div
 																		ref={dragProvided.innerRef}
+																		title="Drag to reorder or move"
 																		{...dragProvided.draggableProps}
 																		{...dragProvided.dragHandleProps}
 																		className={`rounded-md border border-gray-200 bg-gray-50 p-3 ${

@@ -90,7 +90,7 @@ export default function DashboardPage() {
 							type="button"
 							onClick={handleQuickCreate}
 							disabled={creating}
-							className="inline-flex items-center gap-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-60"
+							className="inline-flex cursor-pointer items-center gap-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-60"
 						>
 							<Plus size={16} />
 							{creating ? "Creating..." : "Create"}
@@ -146,7 +146,7 @@ export default function DashboardPage() {
 										<button
 											type="button"
 											onClick={() => navigate(`/boards/${item.boardId}`)}
-											className="flex w-full items-start justify-between text-left hover:bg-slate-50 rounded-md px-2 py-1"
+											className="flex w-full cursor-pointer items-start justify-between text-left hover:bg-slate-50 rounded-md px-2 py-1"
 										>
 											<span className="text-sm text-slate-700">{item.text}</span>
 											<span className="text-xs text-slate-400">{item.time}</span>
@@ -164,14 +164,14 @@ export default function DashboardPage() {
 							<button
 								type="button"
 								onClick={() => navigate("/boards")}
-								className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+								className="w-full cursor-pointer  rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
 							>
 								Go to Boards
 							</button>
 							<button
 								type="button"
 								onClick={() => navigate("/boards")}
-								className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
+								className="w-full cursor-pointer rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50"
 							>
 								Create or manage boards
 							</button>
