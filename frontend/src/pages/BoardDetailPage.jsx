@@ -5,8 +5,9 @@ import listApi from "../api/listApi";
 import cardApi from "../api/cardApi";
 import { Edit, Trash, Plus } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import CardModal from "../components/cardModal";
+
 import EditCardModal from "../components/EditCardModal";
+import CardModal from "../components/CardModal";
 
 export default function BoardDetailPage() {
 	const { id } = useParams();
