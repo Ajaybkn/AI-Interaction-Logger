@@ -1,4 +1,3 @@
-// src/pages/DashboardPage.jsx
 import { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
@@ -48,7 +47,7 @@ export default function DashboardPage() {
 		}
 	};
 
-	// Recent activity (derived from boards)
+	// Recent activity
 	const recent = useMemo(() => {
 		return (boards || [])
 			.slice(-5)
@@ -64,7 +63,6 @@ export default function DashboardPage() {
 	return (
 		<div className="min-h-screen bg-slate-50">
 			<div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-				{/* Welcome + Quick actions */}
 				<div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 					<div className="flex items-center gap-3">
 						<div className="grid h-12 w-12 place-items-center rounded-full bg-indigo-600 text-white text-lg font-semibold">
@@ -98,7 +96,7 @@ export default function DashboardPage() {
 					</div>
 				</div>
 
-				{/* Stats: only Boards */}
+				{/* Stats section */}
 				<div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					<div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md">
 						<div className="flex items-center justify-between">
@@ -116,7 +114,7 @@ export default function DashboardPage() {
 					</div>
 				</div>
 
-				{/* Main content: Recent activity and quick links */}
+				{/* Main content */}
 				<div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
 					{/* Recent activity */}
 					<div className="lg:col-span-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">

@@ -1,4 +1,3 @@
-// src/components/EditCardModal.jsx
 export default function EditCardModal({
 	open,
 	saving,

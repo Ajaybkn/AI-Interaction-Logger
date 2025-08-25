@@ -1,4 +1,3 @@
-// src/pages/LoginPage.jsx
 import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import authApi from "../api/authApi";
@@ -34,9 +33,8 @@ export default function LoginPage() {
 
 	return (
 		<div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
-			{/* Left: Brand / Message */}
+			{/* Left */}
 			<section className="relative hidden md:flex items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-900 to-violet-900">
-				{/* Soft accent blobs */}
 				<div className="pointer-events-none absolute inset-0">
 					<div className="absolute -top-24 -left-16 h-72 w-72 rounded-full bg-indigo-400/30 blur-3xl" />
 					<div className="absolute -bottom-24 -right-16 h-72 w-72 rounded-full bg-fuchsia-400/30 blur-3xl" />
@@ -102,7 +100,7 @@ export default function LoginPage() {
 							/>
 						</div>
 
-						{/* Password with eye toggle */}
+						{/* Password */}
 						<div className="mb-1">
 							<label htmlFor="password" className="mb-1 block text-sm font-medium text-slate-700">
 								Password
@@ -130,12 +128,10 @@ export default function LoginPage() {
 							</div>
 						</div>
 
-						{/* Error */}
 						{error ? (
 							<div className="mb-3 mt-2 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>
 						) : null}
 
-						{/* Submit */}
 						<button
 							type="submit"
 							disabled={submitting}
@@ -152,7 +148,7 @@ export default function LoginPage() {
 						</p>
 					</form>
 
-					{/* Small policy footnote */}
+					{/*  policy footnote */}
 					<p className="mt-4 text-center text-xs text-slate-500">
 						By continuing, you agree to our Terms and acknowledge our Privacy Policy.
 					</p>

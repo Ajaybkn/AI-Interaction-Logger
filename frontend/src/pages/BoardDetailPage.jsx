@@ -1,4 +1,3 @@
-// src/pages/BoardDetailPage.jsx
 import { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import boardApi from "../api/boardApi";
@@ -10,7 +9,7 @@ import CardModal from "../components/cardModal";
 import EditCardModal from "../components/EditCardModal";
 
 export default function BoardDetailPage() {
-	const { id } = useParams(); // boardId from route
+	const { id } = useParams();
 	const [board, setBoard] = useState(null);
 	const [lists, setLists] = useState([]);
 	const [newListName, setNewListName] = useState("");
@@ -161,7 +160,6 @@ export default function BoardDetailPage() {
 		if (!confirm("Delete this card?")) return;
 		const snapshot = lists;
 		try {
-			// Optimistic UI
 			setLists((prev) =>
 				prev.map((l) => {
 					const lid = l._id || l.id;
@@ -175,7 +173,7 @@ export default function BoardDetailPage() {
 			await cardApi.remove(cardId);
 		} catch (err) {
 			console.log(err, "error");
-			// Rollback
+
 			setLists(snapshot);
 		}
 	};
@@ -226,12 +224,11 @@ export default function BoardDetailPage() {
 		if (!confirm("Delete this list and its cards?")) return;
 		const snapshot = lists;
 		try {
-			// Optimistic UI
 			setLists((prev) => prev.filter((l) => (l._id || l.id) !== listId));
 			await listApi.remove(listId);
 		} catch (err) {
 			console.log(err, "error");
-			// Rollback
+
 			setLists(snapshot);
 		}
 	};
@@ -261,7 +258,6 @@ export default function BoardDetailPage() {
 			const sourceIndex = source.index;
 			const destIndex = destination.index;
 
-			// Snapshot for rollback
 			const prev = lists;
 
 			try {
@@ -276,7 +272,6 @@ export default function BoardDetailPage() {
 						})
 					);
 
-					// Persist
 					await cardApi.move(draggableId, {
 						targetListId: sourceListId,
 						newPosition: destIndex,
@@ -289,7 +284,6 @@ export default function BoardDetailPage() {
 					const dstCards = dstList?.cards || [];
 					const { src, dst } = moveBetween(srcCards, dstCards, sourceIndex, destIndex);
 
-					// Optimistic UI
 					setLists((prev) =>
 						prev.map((l) => {
 							const lid = l._id || l.id;
@@ -299,7 +293,6 @@ export default function BoardDetailPage() {
 						})
 					);
 
-					// Persist
 					await cardApi.move(draggableId, {
 						targetListId: destListId,
 						newPosition: destIndex,
@@ -492,7 +485,7 @@ export default function BoardDetailPage() {
 				onSubmit={saveEdit}
 			/>
 
-			{/* Edit List Modal (inline) */}
+			{/* Edit List Modal  */}
 			{editListOpen && (
 				<div className="fixed inset-0 z-50 flex items-center justify-center" role="dialog" aria-modal="true">
 					<div className="absolute inset-0 bg-black/40" onClick={closeEditList} />

@@ -26,7 +26,7 @@ export default function BoardsPage() {
 		e.stopPropagation();
 		const currentName = board.name || "";
 		const nextName = window.prompt("Rename board:", currentName);
-		if (nextName == null) return; // cancel
+		if (nextName == null) return;
 		const trimmed = nextName.trim();
 		if (!trimmed || trimmed === currentName) return;
 
@@ -37,7 +37,6 @@ export default function BoardsPage() {
 			);
 		} catch (err) {
 			console.error("Failed to update board", err);
-			// Optional: show toast
 		}
 	};
 	const handleDeleteBoard = async (e, boardId) => {
@@ -46,12 +45,11 @@ export default function BoardsPage() {
 
 		const snapshot = boards;
 		try {
-			// Optimistic UI
 			setBoards((prev) => prev.filter((b) => (b._id || b.id) !== boardId));
 			await boardApi.remove(boardId);
 		} catch (err) {
 			console.error("Failed to delete board:", err);
-			// Rollback on failure
+
 			setBoards(snapshot);
 		}
 	};
@@ -69,7 +67,11 @@ export default function BoardsPage() {
 					placeholder="New board name"
 					className="border rounded px-3 py-2 w-64"
 				/>
-				<button type="submit" className="bg-blue-600 cursor-pointer  text-white px-4 py-2 rounded hover:bg-blue-700" title="Create New Board">
+				<button
+					type="submit"
+					className="bg-blue-600 cursor-pointer  text-white px-4 py-2 rounded hover:bg-blue-700"
+					title="Create New Board"
+				>
 					+ Create
 				</button>
 			</form>

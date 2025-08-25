@@ -65,7 +65,6 @@ export default function App() {
 						}
 					/>
 
-					{/* catch-all */}
 					<Route path="*" element={<Navigate to="/" replace />} />
 				</Routes>
 			</BrowserRouter>

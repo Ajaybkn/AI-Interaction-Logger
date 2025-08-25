@@ -18,7 +18,7 @@ const cardApi = {
 			params: { q },
 			...authHeader(),
 		});
-		return res.data; // array of cards
+		return res.data;
 	},
 };
 

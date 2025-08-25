@@ -1,11 +1,10 @@
-// src/components/Navbar.jsx
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useContext, useState, useRef, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import cardApi from "../api/cardApi";
 import { Search, Loader2 } from "lucide-react";
-
-// Simple debounce hook
+import { Menu } from "lucide-react";
+//  debounce
 function useDebouncedValue(value, delay = 300) {
 	const [debounced, setDebounced] = useState(value);
 	useEffect(() => {
@@ -39,7 +38,7 @@ export default function Navbar() {
 	const [openResults, setOpenResults] = useState(false);
 	const containerRef = useRef(null);
 
-	// Query backend on debounce
+	// Query on debounce
 	useEffect(() => {
 		let ignore = false;
 		const run = async () => {
@@ -106,7 +105,7 @@ export default function Navbar() {
 			<nav className="bg-slate-800 text-white border-b border-slate-700/60">
 				<div className="mx-auto max-w-7xl px-3 sm:px-4">
 					<div className="flex h-12 items-center justify-between gap-2">
-						{/* Left: Brand */}
+						{/* Left */}
 						<Link
 							to="/dashboard"
 							className="inline-flex items-center rounded px-2 py-1 text-sm font-semibold tracking-wide text-white hover:bg-white/10"
@@ -114,7 +113,7 @@ export default function Navbar() {
 							Kanban Board
 						</Link>
 
-						{/* Center: Links */}
+						{/* Center */}
 						<div className="hidden md:flex items-center gap-2">
 							<Link to="/dashboard" className={`rounded px-3 py-1.5 text-sm ${isActive("/dashboard")}`}>
 								Dashboard
@@ -124,7 +123,7 @@ export default function Navbar() {
 							</Link>
 						</div>
 
-						{/* Right: Global search + user + logout */}
+						{/* Right */}
 						<div className="hidden md:flex items-center gap-2">
 							<div className="relative" ref={containerRef}>
 								<div className="w-64">
@@ -197,14 +196,7 @@ export default function Navbar() {
 							aria-label="Toggle menu"
 							onClick={() => setMenuOpen((o) => !o)}
 						>
-							{/* Using a simple hamburger/cross with spans keeps bundle small */}
-							<span
-								className={`block h-0.5 w-5 bg-current transition ${menuOpen ? "translate-y-1.5 rotate-45" : ""}`}
-							/>
-							<span className={`block h-0.5 w-5 bg-current my-1 transition ${menuOpen ? "opacity-0" : ""}`} />
-							<span
-								className={`block h-0.5 w-5 bg-current transition ${menuOpen ? "-translate-y-1.5 -rotate-45" : ""}`}
-							/>
+							<Menu className="w-6 h-6" />
 						</button>
 					</div>
 				</div>
@@ -213,13 +205,11 @@ export default function Navbar() {
 				{menuOpen && (
 					<div className="md:hidden border-t border-slate-700/60 bg-slate-800">
 						<div className="mx-auto max-w-7xl px-3 sm:px-4 py-3 space-y-3">
-							<div className="flex items-center justify-center gap-3" >
+							<div className="flex items-center justify-center gap-3">
 								<Link
 									to="/dashboard"
 									onClick={() => setMenuOpen(false)}
 									className={`rounded px-3 py-1.5 text-sm ${isActive("/dashboard")}`}
-
-									
 								>
 									Dashboard
 								</Link>
