@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "api for the AI interaction logger",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "dev": "node backend/src/server.js",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "node backend/src/server.js"
   },
   "author": "Ajay Singh Khangarot",
   "license": "ISC",
