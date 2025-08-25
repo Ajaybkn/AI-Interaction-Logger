@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5003/api/auth";
+// const API_URL = "http://localhost:5003/api/auth";
+const API_URL = "https://kanban-board-mv44.onrender.com/api/auth";
 
 const authApi = {
 	register: (data) => axios.post(`${API_URL}/register`, data).then((res) => res.data),

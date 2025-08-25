@@ -2,7 +2,8 @@
 import axios from "axios";
 import { getToken } from "../utils/storage";
 
-const API = "http://localhost:5003/api/cards";
+// const API = "http://localhost:5003/api/cards";
+const API = "https://kanban-board-mv44.onrender.com/api/cards";
 
 const authHeader = () => ({
 	headers: { Authorization: `Bearer ${getToken()}` },
