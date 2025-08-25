@@ -2,9 +2,7 @@ import asyncHandler from "express-async-handler";
 import User from "../models/User.js";
 import { generateToken } from "../utils/generateToken.js";
 
-// @desc Register new user
-// @route POST /api/auth/register
-// @access Public
+//  Register new user | POST /api/auth/register | access Public
 export const registerUser = asyncHandler(async (req, res) => {
 	const { name, email, password } = req.body;
 
@@ -34,9 +32,7 @@ export const registerUser = asyncHandler(async (req, res) => {
 	}
 });
 
-// @desc Login user
-// @route POST /api/auth/login
-// @access Public
+//  Login user | POST /api/auth/login | access Public
 export const loginUser = asyncHandler(async (req, res) => {
 	const { email, password } = req.body;
 
@@ -55,9 +51,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 	}
 });
 
-// @desc Get current user
-// @route GET /api/auth/me
-// @access Private
+//  Get current user | GET /api/auth/me | access Private
 export const getMe = asyncHandler(async (req, res) => {
 	res.json(req.user);
 });

@@ -2,9 +2,8 @@ import asyncHandler from "express-async-handler";
 import Board from "../models/Board.js";
 import List from "../models/List.js";
 
-// @desc    Create new board
-// @route   POST /api/boards
-// @access  Private
+// Create new board | POST /api/boards | Private
+
 export const createBoard = asyncHandler(async (req, res) => {
 	const { name, description } = req.body;
 
@@ -41,17 +40,14 @@ export const createBoard = asyncHandler(async (req, res) => {
 	});
 });
 
-// @desc    Get all boards of logged in user
-// @route   GET /api/boards
-// @access  Private
+//   Get all boards of logged in user | GET /api/boards | Private
+
 export const getBoards = asyncHandler(async (req, res) => {
 	const boards = await Board.find({ members: req.user._id });
 	res.json(boards);
 });
 
-// @desc    Get single board
-// @route   GET /api/boards/:id
-// @access  Private
+//   Get single board | GET /api/boards/:id | Private
 
 export const getBoardById = asyncHandler(async (req, res) => {
 	const board = await Board.findById(req.params.id);
@@ -71,9 +67,8 @@ export const getBoardById = asyncHandler(async (req, res) => {
 	res.json({ ...board.toObject(), lists });
 });
 
-// @desc    Update board
-// @route   PUT /api/boards/:id
-// @access  Private
+//  Update board | PUT /api/boards/:id | Private
+
 export const updateBoard = asyncHandler(async (req, res) => {
 	const board = await Board.findById(req.params.id);
 
@@ -95,9 +90,8 @@ export const updateBoard = asyncHandler(async (req, res) => {
 	res.json(updatedBoard);
 });
 
-// @desc    Delete board
-// @route   DELETE /api/boards/:id
-// @access  Private
+//  Delete board | DELETE /api/boards/:id | Private
+
 export const deleteBoard = asyncHandler(async (req, res) => {
 	const board = await Board.findById(req.params.id);
 

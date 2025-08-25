@@ -10,16 +10,16 @@ const app = express();
 
 app.use(express.json());
 
-// ✅ CORS config
+// ✅ CORS
 app.use(
 	cors({
-		origin: "http://localhost:5173", // Allow Vite frontend
+		origin: "http://localhost:5173",
 		methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-		credentials: true, // if using cookies / auth headers
+		credentials: true,
 	})
 );
 
-// Health check route
+// Health check
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
 // Routes

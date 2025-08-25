@@ -3,9 +3,8 @@ import List from "../models/List.js";
 import Board from "../models/Board.js";
 import Card from "../models/Card.js";
 
-// @desc    Create new list
-// @route   POST /api/lists
-// @access  Private
+//    Create new list |  POST /api/lists | Private
+
 export const createList = asyncHandler(async (req, res) => {
 	const { name, boardId } = req.body;
 
@@ -37,9 +36,7 @@ export const createList = asyncHandler(async (req, res) => {
 	res.status(201).json(list);
 });
 
-// @desc    Get all lists for a board
-// @route   GET /api/lists/:boardId
-// @access  Private
+//   Get all lists for a board | GET /api/lists/:boardId | Private
 
 export const getListsByBoard = asyncHandler(async (req, res) => {
 	const board = await Board.findById(req.params.boardId);
@@ -64,9 +61,8 @@ export const getListsByBoard = asyncHandler(async (req, res) => {
 	res.json(listsWithCards);
 });
 
-// @desc    Update list
-// @route   PUT /api/lists/:id
-// @access  Private
+//  Update list |  PUT /api/lists/:id | Private
+
 export const updateList = asyncHandler(async (req, res) => {
 	const list = await List.findById(req.params.id);
 
@@ -88,9 +84,8 @@ export const updateList = asyncHandler(async (req, res) => {
 	res.json(updatedList);
 });
 
-// @desc    Delete list
-// @route   DELETE /api/lists/:id
-// @access  Private
+//  Delete list | DELETE /api/lists/:id | Private
+
 export const deleteList = asyncHandler(async (req, res) => {
 	const list = await List.findById(req.params.id);
 

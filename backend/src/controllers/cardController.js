@@ -3,9 +3,8 @@ import Card from "../models/Card.js";
 import List from "../models/List.js";
 import Board from "../models/Board.js";
 
-// @desc    Create a new card
-// @route   POST /api/cards
-// @access  Private
+//     Create a new card | POST /api/cards |  Private
+
 export const createCard = asyncHandler(async (req, res) => {
 	const { title, description, listId } = req.body;
 
@@ -39,9 +38,8 @@ export const createCard = asyncHandler(async (req, res) => {
 	res.status(201).json(card);
 });
 
-// @desc    Get all cards in a list
-// @route   GET /api/cards/:listId
-// @access  Private
+//  Get all cards in a list |  GET /api/cards/:listId | Private
+
 export const getCardsByList = asyncHandler(async (req, res) => {
 	const list = await List.findById(req.params.listId);
 	if (!list) {
@@ -59,9 +57,8 @@ export const getCardsByList = asyncHandler(async (req, res) => {
 	res.json(cards);
 });
 
-// @desc    Update card
-// @route   PUT /api/cards/:id
-// @access  Private
+// Update card | PUT /api/cards/:id | Private
+
 export const updateCard = asyncHandler(async (req, res) => {
 	const card = await Card.findById(req.params.id);
 	if (!card) {
@@ -85,9 +82,8 @@ export const updateCard = asyncHandler(async (req, res) => {
 	res.json(updatedCard);
 });
 
-// @desc    Move card between lists
-// @route   PATCH /api/cards/:id/move
-// @access  Private
+//  Move card between lists | PATCH /api/cards/:id/move | Private
+
 export const moveCard = asyncHandler(async (req, res) => {
 	const { targetListId, newPosition } = req.body;
 	const card = await Card.findById(req.params.id);
@@ -116,9 +112,8 @@ export const moveCard = asyncHandler(async (req, res) => {
 	res.json(movedCard);
 });
 
-// @desc    Delete card
-// @route   DELETE /api/cards/:id
-// @access  Private
+//  Delete card | DELETE /api/cards/:id | Private
+
 export const deleteCard = asyncHandler(async (req, res) => {
 	const card = await Card.findById(req.params.id);
 	if (!card) {
@@ -144,7 +139,7 @@ export const searchCards = asyncHandler(async (req, res) => {
 		throw new Error("Search query (q) is required");
 	}
 
-	// find boards where the user is a member
+	// find boards
 	const boards = await Board.find({ members: req.user._id }).select("_id");
 	const boardIds = boards.map((b) => b._id);
 
